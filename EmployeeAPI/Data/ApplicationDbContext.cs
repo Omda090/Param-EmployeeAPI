@@ -23,7 +23,7 @@ namespace EmployeeAPI.Data
         }
 
         public DbSet<Employee> employees { get; set; }
-        public DbSet<Users> users { get; set; }
+        public DbSet<Userlogin> userlogins { get; set; }
 
 
     }
