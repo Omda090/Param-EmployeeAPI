@@ -11,5 +11,6 @@ namespace EmployeeAPI.DTOs
         public string Address { get; set; }
         public string Branch { get; set; }
         public string JobTitle { get; set; }
+      
     }
 }
