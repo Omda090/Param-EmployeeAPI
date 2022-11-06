@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using DTOs;
 using EmployeeAPI.DTOs;
 using EmployeeAPI.Interfaces;
 using EmployeeAPI.Models;
@@ -53,6 +54,27 @@ namespace EmployeeAPI.Controllers
                 return Ok(singleUser);
 
             return BadRequest("User Not Found");
+        }
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
+        {
+            userForRegisterDto.Nameen = userForRegisterDto.Nameen.ToLower();
+
+            if (await _repo.UserExits(userForRegisterDto.Nameen))
+            {
+                return BadRequest("this user is already register");
+            }
+
+            var userToCreate = _mapper.Map<Userlogin>(userForRegisterDto);
+           
+            var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
+            var userToReturn = _mapper.Map<UserForDetailsDto>(userToCreate);
+            if (result.Succeeded)
+            {
+                return Ok(userToReturn);
+            }
+            return BadRequest(result.Errors);
         }
 
 

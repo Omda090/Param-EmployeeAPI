@@ -1,6 +1,7 @@
 ﻿using EmployeeAPI.Data;
 using EmployeeAPI.Interfaces;
 using EmployeeAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,14 +33,35 @@ namespace EmployeeAPI.ImplementationRepository
             throw new NotImplementedException();
         }
 
-        public Task<Userlogin> Login(int UserId, string UserName, string Password)
+        public async Task<Userlogin> Login(int UserId, string UserName, string Password)
         {
-            throw new NotImplementedException();
+            var user = await _context.userlogins.FirstOrDefaultAsync(x => x.Id == UserId);
+            if (user == null)
+                return null;
+            return user;
         }
 
-        public Task<Userlogin> Register(Userlogin user, string Password)
+        public async Task<Userlogin> Register(Userlogin user, string Password)
         {
-            throw new NotImplementedException();
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(Password, out passwordHash, out passwordSalt);
+            await _context.userlogins.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+        public async Task<bool> UserExits(string UserName)
+        {
+            if (await _context.userlogins.AnyAsync(x => x.UserName == UserName))
+                return true;
+            return false;
+        }
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
         }
 
         public void Remove(Userlogin entity)

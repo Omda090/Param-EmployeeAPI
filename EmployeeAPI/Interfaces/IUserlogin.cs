@@ -10,6 +10,7 @@ namespace EmployeeAPI.Interfaces
     {
         Task<Userlogin> Register(Userlogin user, string Password);
         Task<Userlogin> Login(int UserId, string UserName, string Password);
+        Task<bool> UserExits(string UserName);
 
         Task<Userlogin> GetById(int id);
         Task<IEnumerable<Userlogin>> GetAll();
