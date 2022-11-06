@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EmployeeAPI.DTOs;
 using EmployeeAPI.Interfaces;
 using EmployeeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,7 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpPost("CreateEmployee")]
-        public async Task<IActionResult> CreateEmp(Employee employee)
+        public async Task<IActionResult> CreateEmp(EmployeeDto employee)
         {
             var emp = _mapper.Map<Employee>(employee);
 

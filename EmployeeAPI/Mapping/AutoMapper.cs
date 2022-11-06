@@ -14,8 +14,10 @@ namespace EmployeeAPI.Mapping
         public AutoMapper()
         {
             CreateMap<Employee,EmployeeDto>();
-        }
+            CreateMap<EmployeeDto, Employee>();
 
-        public int CreateMap { get; }
+
+
+        }
     }
 }

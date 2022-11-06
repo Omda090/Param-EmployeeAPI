@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using EmployeeAPI.DTOs;
 using EmployeeAPI.Interfaces;
 using EmployeeAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -20,17 +22,17 @@ namespace EmployeeAPI.Controllers
     [ApiController]
     public class UserloginController : ControllerBase
     {
-        private readonly IConfiguration _config;
+        private readonly Microsoft.Extensions.Configuration.IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly IUserlogin _repo;
         private readonly UserManager<Userlogin> _userManager;
         private readonly SignInManager<Userlogin> _signInManager;
 
 
-        public UserloginController(IConfiguration configuration,IMapper mapper, IUserlogin userlogin,
+        public UserloginController(Microsoft.Extensions.Configuration.IConfiguration config, IMapper mapper, IUserlogin userlogin,
             UserManager<Userlogin> userManager, SignInManager<Userlogin> signInManager)
         {
-            _config = configuration;
+            _config = config;
             _mapper = mapper;
             _repo = userlogin;
             _userManager = userManager;
@@ -79,7 +81,6 @@ namespace EmployeeAPI.Controllers
           {
              new Claim(ClaimTypes.Name,userlogin.UserName.ToString()),
             new Claim(ClaimTypes.SerialNumber,userlogin.Nameen.ToString()),
-            new Claim(ClaimTypes.Surname,userlogin.Healthunitid.ToString()),
             new Claim(ClaimTypes.NameIdentifier,userlogin.Id.ToString()),
               new Claim(JwtRegisteredClaimNames.UniqueName,userlogin.UserName.ToString()),
 

@@ -10,9 +10,10 @@ namespace EmployeeAPI.Models
     {
        
 
-        public string UserName { get; set; }
         public string Nameen { get; set; }
         public string Password { get; set; }
-        public int? Healthunitid { get; set; }
+
+        public virtual ICollection<UserRole> UserRoles { get; set; }
+
     }
 }

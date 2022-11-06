@@ -1,3 +1,5 @@
+using Application.Dependency.Configrations;
+using Data;
 using EmployeeAPI.Data;
 using EmployeeAPI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,19 +8,18 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.HttpsPolicy;
+
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,9 +36,11 @@ namespace EmployeeAPI
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //Jwt Auth & Authorization
             IdentityBuilder builder = services.AddIdentityCore<Userlogin>(opt =>
 
@@ -48,11 +51,11 @@ namespace EmployeeAPI
                 opt.Password.RequireUppercase = false;
 
             });
-            builder = new IdentityBuilder(builder.UserType, typeof(AspNetRole), builder.Services);
-         //   builder.AddEntityFrameworkStores<ApplicationDbContext>();
+            builder = new Microsoft.AspNetCore.Identity.IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.AddRoleValidator<RoleValidator<AspNetRole>>();
-            builder.AddRoleManager<RoleManager<AspNetRole>>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<Userlogin>>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -80,10 +83,9 @@ namespace EmployeeAPI
 
 
 
-            //services.ConfigureCors();
-            //services.AddInfrastructure(Configuration);
-            //services.ConfigureScoped();
-
+            services.ConfigureCors();
+            services.ConfigureScoped();
+            services.AddInfrastructure(Configuration);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -99,14 +101,14 @@ namespace EmployeeAPI
                 });
             });
 
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //services.AddControllersWithViews().AddNewtonsoftJson(options =>
-            //       options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            //);
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-           options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+           // services.AddDbContext<ApplicationDbContext>(options =>
+           //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
         }
