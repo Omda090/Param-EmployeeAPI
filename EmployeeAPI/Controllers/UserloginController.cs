@@ -4,6 +4,7 @@ using DTOs;
 using EmployeeAPI.DTOs;
 using EmployeeAPI.Interfaces;
 using EmployeeAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeAPI.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class UserloginController : ControllerBase
